@@ -68,7 +68,7 @@ object DailyInsightService {
         val todayDecisions = StorageService.instance.loadDecisions()
             .filter { d ->
                 val cal = Calendar.getInstance()
-                cal.timeInMillis = d.timestamp * 1000
+                cal.timeInMillis = d.madeAt * 1000
                 val today = Calendar.getInstance()
                 cal.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
                     cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)

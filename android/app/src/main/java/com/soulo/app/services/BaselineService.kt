@@ -172,7 +172,7 @@ object BaselineService {
 
     private fun sqrt(v: Double): Double = kotlin.math.sqrt(v)
     private fun abs(v: Double): Double = kotlin.math.abs(v)
-    private fun Double.pow(exp: Double): Double = kotlin.math.pow(this, exp)
+    private fun Double.pow(exp: Double): Double = java.lang.Math.pow(this, exp)
 
     private fun List<Double>.averageOrZero(): Double = if (isEmpty()) 0.0 else average()
 }

@@ -23,11 +23,7 @@ fun InsightsScreen(storage: StorageService, onNavigate: (String) -> Unit) {
         if (entries.size >= 6) {
             val baselines = BiomarkerTrendService.computeTrends(
                 entries.mapNotNull { it.biomarkers }, emptyMap()
-            ).associate { it.metric to BaselineService.MetricBaseline(
-                metric = it.metric, median = it.baseline, p25 = 0.0, p75 = 0.0,
-                mean = it.baseline, stdDev = 0.0, sampleCount = it.sampleCount,
-                isStable = !it.isAnomalous
-            ) }
+            ).associate { it.metric to it.baseline }
             CognitiveDriftService.detectDrift(entries, baselines)
         } else null
     }

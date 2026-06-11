@@ -29,7 +29,7 @@ object BehaviorPredictionService {
 
         val gaps = sorted.zipWithNext().map { (a, b) -> a.timestamp - b.timestamp }
         val avgGap = if (gaps.isNotEmpty()) gaps.average() else 0.0
-        val lastGap = gaps.firstOrNull() ?: 0.0
+        val lastGap: Double = gaps.firstOrNull()?.toDouble() ?: 0.0
         val gapRatio = if (avgGap > 0) lastGap / avgGap else 1.0
         val hasWarning = patterns.any { it.type == PatternType.consistencyWarning }
         val probability = ((gapRatio - 1.0).coerceAtLeast(0.0) * 0.5 + if (hasWarning) 0.2 else 0.0)
