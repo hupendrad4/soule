@@ -342,6 +342,7 @@ fun BottomNavBar(selectedTab: Int, onNavigate: (String) -> Unit) {
     }
 }
 
+@Composable
 private fun navColors() = NavigationBarItemDefaults.colors(
     selectedIconColor = SouloColors.accent,
     selectedTextColor = SouloColors.accent,

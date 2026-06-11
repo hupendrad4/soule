@@ -141,9 +141,9 @@ object AudioDSP {
         var maxVal = 0.0
         var maxLag = 0
         for (i in minIdx..maxIdx) {
-            val val = abs(spectrum[i * 2].toDouble())
-            if (val > maxVal) {
-                maxVal = val
+            val v = abs(spectrum[i * 2].toDouble())
+            if (v > maxVal) {
+                maxVal = v
                 maxLag = i
             }
         }

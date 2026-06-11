@@ -120,6 +120,9 @@ dependencies {
     implementation("androidx.sqlite:sqlite:2.4.0")
     implementation("androidx.sqlite:sqlite-framework:2.4.0")
 
+    // Play Review
+    implementation("com.google.android.play:review-ktx:2.0.2")
+
     // Security
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
