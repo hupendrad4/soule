@@ -1,0 +1,109 @@
+name: Android CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'android/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'android/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Lint
+        run: ./gradlew lint
+
+  build:
+    needs: lint
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Soulo-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+  test:
+    needs: lint
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+  deploy-playstore:
+    if: github.ref == 'refs/heads/main'
+    needs: [build, test]
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease
+      - name: Sign Release
+        if: ${{ secrets.SIGN_KEYSTORE != '' }}
+        run: |
+          echo "${{ secrets.SIGN_KEYSTORE }}" | base64 --decode > keystore.jks
+          jarsigner -keystore keystore.jks \
+            -storepass "${{ secrets.SIGN_STOREPASS }}" \
+            -keypass "${{ secrets.SIGN_KEYPASS }}" \
+            app/build/outputs/bundle/release/app-release.aab \
+            "${{ secrets.SIGN_KEYALIAS }}"
+      - name: Upload to Play Console
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
+          packageName: com.soulo.app
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: internal
