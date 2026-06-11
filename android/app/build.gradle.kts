@@ -4,6 +4,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
+val keystoreProps by lazy {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) java.util.Properties().also { f.inputStream().use { s -> it.load(s) } } else null
+}
+
 android {
     namespace = "com.soulo.app"
     compileSdk = 35
@@ -42,18 +47,14 @@ android {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
 
-    val keystoreFile = rootProject.file("keystore.properties")
-    val keystoreProps = if (keystoreFile.exists()) {
-        java.util.Properties().apply { load(keystoreFile.inputStream()) }
-    } else null
-
     signingConfigs {
         create("release") {
-            if (keystoreProps != null) {
-                storeFile = rootProject.file(keystoreProps["storeFile"] ?: "none")
-                storePassword = keystoreProps["storePassword"] as? String ?: ""
-                keyAlias = keystoreProps["keyAlias"] as? String ?: ""
-                keyPassword = keystoreProps["keyPassword"] as? String ?: ""
+            val p = keystoreProps
+            if (p != null) {
+                storeFile = rootProject.file(p.getProperty("storeFile") ?: "none")
+                storePassword = p.getProperty("storePassword")
+                keyAlias = p.getProperty("keyAlias")
+                keyPassword = p.getProperty("keyPassword")
             }
         }
     }
