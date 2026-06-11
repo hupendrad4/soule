@@ -132,8 +132,8 @@ dependencies {
     // ONNX Runtime
     implementation("com.microsoft.onnxruntime:onnxruntime-android:${project.findProperty("ONNXRUNTIME_VERSION") ?: "1.21.0"}")
 
-    // Stripe (optional)
-    implementation("com.stripe:stripe-android:21.2.2")
+    // Stripe (optional - requires maven.stripe.com repo)
+    // implementation("com.stripe:stripe-android:21.2.2")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
