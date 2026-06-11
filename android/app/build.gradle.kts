@@ -6,7 +6,16 @@ plugins {
 
 val keystoreProps by lazy {
     val f = rootProject.file("keystore.properties")
-    if (f.exists()) java.util.Properties().also { f.inputStream().use { s -> it.load(s) } } else null
+    if (f.exists()) {
+        val map = mutableMapOf<String, String>()
+        f.forEachLine { line ->
+            val idx = line.indexOf('=')
+            if (idx > 0 && !line.startsWith("#")) {
+                map[line.substring(0, idx).trim()] = line.substring(idx + 1).trim()
+            }
+        }
+        map
+    } else null
 }
 
 android {
@@ -51,10 +60,10 @@ android {
         create("release") {
             val p = keystoreProps
             if (p != null) {
-                storeFile = rootProject.file(p.getProperty("storeFile") ?: "none")
-                storePassword = p.getProperty("storePassword")
-                keyAlias = p.getProperty("keyAlias")
-                keyPassword = p.getProperty("keyPassword")
+                storeFile = rootProject.file(p["storeFile"] ?: "none")
+                storePassword = p["storePassword"]
+                keyAlias = p["keyAlias"]
+                keyPassword = p["keyPassword"]
             }
         }
     }
