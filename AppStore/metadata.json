@@ -1,0 +1,80 @@
+{
+  "version": "1.0.0",
+  "appleId": "com.soulo.app",
+  "primaryLanguage": "en-US",
+  "languages": ["en-US"],
+
+  "appName": "Soulo",
+  "subtitle": "Private AI Voice Journal",
+  "categories": ["HEALTH_AND_FITNESS", "MEDICAL"],
+
+  "description": "Soulo is a private AI-powered voice journal that helps you understand yourself better. Speak your thoughts, and Soulo analyzes your speech patterns to reveal hidden insights about your emotional well-being, behavioral patterns, and personal growth.\n\nHOW IT WORKS:\n• Record voice entries as naturally as speaking to a friend\n• Your voice is transcribed on-device — nothing leaves your phone\n• AI analyzes speech biomarkers (rate, pitch, energy, hesitations)\n• Patterns are detected: broken promises, topic avoidance, goal cycles, sentiment trends\n• Personalized insights delivered daily\n\nKEY FEATURES:\n✓ 100% On-Device Processing\n  All transcription, analysis, and pattern detection happens on your device. Your voice data never leaves your phone.\n\n✓ Voice Biomarker Analysis\n  Speech rate, pitch instability, vocal energy, hesitation patterns, micro-breaths, jitter, and shimmer — all computed from your natural speech.\n\n✓ Pattern Detection Engine\n  Identifies broken promises, topic avoidance, declining sentiment, goal abandonment, contradictions, cognitive shifts, and relationship patterns.\n\n✓ Voice-Powered Emotion Detection\n  Understands your emotional state from voice tone using on-device AI models.\n\n✓ Daily Insights\n  Get personalized insights about your patterns, emotions, and growth trends delivered each morning.\n\n✓ Encrypted & Private\n  AES-GCM encryption for all audio. End-to-end encrypted iCloud backups. No account required.\n\n✓ Export Your Data\n  Export your journal as JSON, CSV, or text anytime.\n\nSUBSCRIPTIONS:\nSoulo offers a free tier (7 entries) to try the experience.\n• Monthly: $9.99/month\n• Annual: $79.99/year (save 33%)\n\nPrivacy Policy: https://soulo.app/privacy\nTerms of Service: https://soulo.app/terms",
+
+  "keywords": [
+    "voice journal", "AI journal", "mental health", "voice diary",
+    "speech analysis", "emotion tracking", "mood tracker",
+    "journaling", "self reflection", "mindfulness",
+    "biomarkers", "voice biomarkers", "private journal",
+    "on device AI", "privacy first"
+  ],
+
+  "promotionalText": "The only voice journal that understands what your voice says about how you feel.",
+
+  "screenshots": {
+    "iphone": {
+      "6.5inch": [
+        {
+          "filename": "iphone_65_record.png",
+          "description": "Recording screen with waveform visualization and real-time transcription"
+        },
+        {
+          "filename": "iphone_65_insights.png",
+          "description": "Insights dashboard showing detected patterns, biomarker trends, and topic analysis"
+        },
+        {
+          "filename": "iphone_65_history.png",
+          "description": "Entry history with emotion tags, topics, and sentiment indicators"
+        },
+        {
+          "filename": "iphone_65_biomarkers.png",
+          "description": "Voice biomarker breakdown with charts for speech rate, energy, and pitch"
+        }
+      ],
+      "5.5inch": [
+        {
+          "filename": "iphone_55_record.png",
+          "description": "Recording screen with waveform visualization"
+        },
+        {
+          "filename": "iphone_55_insights.png",
+          "description": "Insights dashboard with pattern detection"
+        }
+      ]
+    },
+    "ipad": {
+      "12.9inch": [
+        {
+          "filename": "ipad_dashboard.png",
+          "description": "Full iPad dashboard with entry list and insight panels side by side"
+        }
+      ]
+    }
+  },
+
+  "appReviewNotes": "No account required. Voice processing happens on-device. Subscription requires StoreKit testing in sandbox. Backend Stripe endpoint at api.soulo.app/stripe is optional — core features work without it.",
+
+  "supportURL": "https://soulo.app/support",
+  "marketingURL": "https://voiceself.app",
+  "privacyURL": "https://soulo.app/privacy",
+
+  "demoAccount": {
+    "required": false,
+    "note": "App works fully without account. All data is local."
+  },
+
+  "ratingConfig": {
+    "resetOnVersion": true,
+    "minimumIntervalDays": 7,
+    "minimumEntryCount": 5
+  }
+}

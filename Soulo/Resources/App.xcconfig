@@ -1,0 +1,29 @@
+// App Configuration
+// Update these values for your deployment
+
+APP_NAME = Soulo
+BUNDLE_ID = com.soulo.app
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
+
+// Deployment
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+SWIFT_VERSION = 5.9
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+
+// Code Signing (update with your team)
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic
+CODE_SIGN_IDENTITY = Apple Development
+
+// Provisioning
+PROVISIONING_PROFILE_SPECIFIER =
+
+// Swift Settings
+SWIFT_STRICT_CONCURRENCY = complete
+SWIFT_ENABLE_EXPLICIT_MODULES = YES
+
+// Build Settings
+ENABLE_USER_SCRIPT_SANDBOXING = YES
+GENERATE_INFOPLIST_FILE = NO
+INFOPLIST_FILE = Soulo/Resources/Info.plist

@@ -1,0 +1,28 @@
+Title: Soulo: AI Voice Journal
+Short Description: Private AI voice journal with emotional insights
+Full Description:
+Soulo is a private, on-device AI voice journal that analyzes your voice patterns to help you understand your emotional well-being.
+
+HOW IT WORKS
+Just speak naturally for 3 minutes a day. Soulo transcribes your voice locally using Whisper, analyzes biomarkers like pitch, energy, and speech rate, and surfaces patterns in your emotional state over time.
+
+ALL ON-DEVICE PRIVACY
+Your voice data never leaves your phone. No account required, no cloud uploads, no analytics SDKs. Everything is encrypted and stored locally.
+
+KEY FEATURES
+• Voice journaling with automatic transcription
+• Voice biomarker analysis (pitch, energy, speech rate, jitter, shimmer)
+• Emotion detection from voice patterns
+• Cognitive drift tracking with Cohen's d effect size
+• Behavior prediction and early warning signals
+• Therapeutic summary generation for sharing with your provider
+• Daily insights and personalized recommendations
+• Decision tracking and outcome analysis
+• End-to-end encryption (AES-GCM per entry)
+• Biometric lock (Face ID / fingerprint)
+• 7-day free trial, then $9.99/month or $79.99/year
+
+Subscription automatically renews unless cancelled. Manage subscriptions in Google Play.
+
+Privacy Policy: https://soulo.app/privacy
+Terms of Service: https://soulo.app/terms

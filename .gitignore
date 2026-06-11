@@ -1,0 +1,48 @@
+# Xcode
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.mymodeldata
+
+# Generated
+Soulo.xcodeproj
+*.xcodeproj
+project.xcworkspace
+
+# Models (download separately)
+Soulo/Resources/Models/*.bin
+Soulo/Resources/Models/*.gguf
+Soulo/Resources/Models/*.pt
+
+# Build
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# IDE
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Secrets
+*.xcconfig
+!Soulo/Resources/App.xcconfig
+
+# Dependencies
+Carthage/
+Pods/
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/keystore.properties
+*.apk
+*.aab
+*.jks
+*.keystore
+android/captures/
+android/.externalNativeBuild/
