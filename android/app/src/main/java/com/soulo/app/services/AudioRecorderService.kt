@@ -94,7 +94,7 @@ class AudioRecorderService {
 
                     val rms = sqrt(copy.map { it.toDouble() / Short.MAX_VALUE }
                         .sumOf { it * it } / read)
-                    _amplitude.value = (rms * 10f).coerceAtMost(1f)
+                    _amplitude.value = (rms * 10.0).coerceAtMost(1.0).toFloat()
                     _durationMs.value = System.currentTimeMillis() - startTime
                 }
             }

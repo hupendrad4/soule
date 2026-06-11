@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.soulo.app.SouloApplication
 import com.soulo.app.models.*
-import com.soulo.app.utilities.StorageService
+import com.soulo.app.services.StorageService
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,7 +72,7 @@ object ExportService {
             val audioDir = File(bundleDir, "recordings")
             audioDir.mkdirs()
             entries.forEach { entry ->
-                entry.recordingPath?.let { path ->
+                entry.audioFile?.let { path ->
                     val source = File(path)
                     if (source.exists()) {
                         source.copyTo(File(audioDir, source.name), overwrite = true)
@@ -107,12 +107,12 @@ object ExportService {
         sb.appendLine("id,timestamp,title,transcript,emotion,valence,topics,isQuickEntry,source")
         for (entry in entries) {
             val timestamp = entry.timestamp
-            val title = csvEscape(entry.title)
+            val title = csvEscape(entry.transcript?.take(50) ?: "")
             val transcript = csvEscape(entry.transcript ?: "")
             val emotion = entry.emotion?.primaryEmotion?.name ?: ""
             val valence = entry.emotion?.valence?.toString() ?: ""
             val topics = entry.topics?.joinToString(";") { "${it.topic}:${it.sentiment}" } ?: ""
-            sb.appendLine("${entry.id},$timestamp,$title,$transcript,$emotion,$valence,$topics,${entry.isQuickEntry},${entry.source}")
+            sb.appendLine("${entry.id},$timestamp,$title,$transcript,$emotion,$valence,$topics,${entry.isQuickEntry},voice")
         }
         return sb.toString()
     }
@@ -123,19 +123,19 @@ object ExportService {
         for (entry in entries.sortedBy { it.timestamp }) {
             sb.appendLine("---")
             sb.appendLine("Date: ${df.format(Date(entry.timestamp * 1000))}")
-            sb.appendLine("Title: ${entry.title}")
+            sb.appendLine("Title: ${entry.transcript?.take(50) ?: "Untitled"}")
             entry.transcript?.let { sb.appendLine("Transcript: $it") }
             entry.emotion?.let { e ->
                 sb.appendLine("Emotion: ${e.primaryEmotion.name} (valence: ${e.valence})")
-                if (e.secondaryEmotions.isNotEmpty()) {
-                    sb.appendLine("Secondary: ${e.secondaryEmotions.joinToString(", ")}")
+                if (!e.secondaryEmotions.isNullOrEmpty()) {
+                    sb.appendLine("Secondary: ${e.secondaryEmotions.joinToString(", ") { it.name }}")
                 }
             }
             if (!entry.topics.isNullOrEmpty()) {
                 sb.appendLine("Topics: ${entry.topics.joinToString(", ") { "${it.topic} (${"%.1f".format(it.sentiment)})" }}")
             }
-            if (entry.recordingPath != null) {
-                sb.appendLine("Audio: ${entry.recordingPath}")
+            if (entry.audioFile != null) {
+                sb.appendLine("Audio: ${entry.audioFile}")
             }
             sb.appendLine()
         }

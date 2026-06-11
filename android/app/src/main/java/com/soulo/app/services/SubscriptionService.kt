@@ -23,9 +23,9 @@ object SubscriptionService {
     private val _status = MutableStateFlow(loadPersistedStatus())
     val status: StateFlow<SubscriptionStatus> = _status
 
-    private val listener = PurchasesListener { billingResult, purchases ->
+    private val listener = PurchasesUpdatedListener { billingResult, purchases ->
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            for (purchase in purchases) {
+            purchases.forEach { purchase ->
                 handlePurchase(purchase)
             }
         }
@@ -74,7 +74,7 @@ object SubscriptionService {
             .build()
 
         client.queryProductDetailsAsync(
-            QueryProductDetailsParams.newBuilder().addProduct(productParams).build()
+            QueryProductDetailsParams.newBuilder().setProductList(listOf(productParams)).build()
         ) { billingResult, details ->
             if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
                 onComplete(false)
@@ -94,7 +94,7 @@ object SubscriptionService {
                 .build()
 
             val billingFlowParams = BillingFlowParams.newBuilder()
-                .addProductDetailsParamsList(productParamsList)
+                .setProductDetailsParamsList(listOf(productParamsList))
                 .build()
 
             client.launchBillingFlow(activity, billingFlowParams)

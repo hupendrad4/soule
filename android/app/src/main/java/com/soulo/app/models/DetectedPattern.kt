@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 enum class PatternType {
     brokenPromise, topicAvoidance, sentimentDecline, goalCycle,
     contradiction, cognitiveShift, relationshipPattern, decisionRegret,
-    improvement, consistencyWarning, emotionalTrend, reflectionPrompt
+    improvement, consistencyWarning, emotionalTrend, reflectionPrompt,
+    anxietySpike, sleepPattern
 
 }
 

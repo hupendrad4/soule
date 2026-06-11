@@ -8,6 +8,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 
 class StorageService(context: Context) : SQLiteOpenHelper(context, "soulo.db", null, 6) {
+    companion object {
+        val instance: StorageService by lazy { StorageService(com.soulo.app.SouloApplication.instance) }
+    }
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
     override fun onCreate(db: SQLiteDatabase) {

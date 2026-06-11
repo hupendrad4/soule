@@ -224,7 +224,7 @@ object Phi3Service {
             val decoder = mutableMapOf<Long, String>()
             decoder.putAll(idToToken)
             decoder.putAll(addedTokens.entries.associate { it.value to it.key })
-            return ids.mapNotNull { decoder[it] }
+            return ids.toList().map { decoder[it] }.filterNotNull()
                 .joinToString("")
                 .replace(" ", " ")
                 .trim()
@@ -260,7 +260,7 @@ object Phi3Service {
         }
 
         override fun decode(ids: LongArray): String {
-            return ids.mapNotNull { revVocab[it] }
+            return ids.toList().map { revVocab[it] }.filterNotNull()
                 .joinToString("")
                 .replace("<s>", "").replace("</s>", "")
                 .trim()

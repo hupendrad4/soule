@@ -3,7 +3,9 @@ package com.soulo.app.services
 import android.content.Context
 import com.soulo.app.SouloApplication
 import com.soulo.app.models.*
-import com.soulo.app.utilities.StorageService
+import com.soulo.app.services.StorageService
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
 import java.io.*
 
@@ -15,7 +17,7 @@ object ErrorRecoveryService {
     private const val CRASH_LOG = "crash_recovery.json"
     private const val BACKUP_DIR = "recovery_backups"
     private val ctx = SouloApplication.instance
-    private val storage = StorageService
+    private val storage = StorageService.instance
 
     data class RecoveryState(
         val stage: String,
@@ -74,7 +76,7 @@ object ErrorRecoveryService {
                     }
                 } else {
                     RecoveryPlan(RecoveryAction.skip,
-                        "Previous session crashed in $stage after ${state.retryCount} retries.")
+                        "Previous session crashed in ${state.stage} after ${state.retryCount} retries.")
                 }
             }
             state.stage == "transcription" && state.transcriptionProgress < 100 -> {
@@ -88,12 +90,14 @@ object ErrorRecoveryService {
     }
 
     // Backup an entry before potentially destructive operation
+    private val backupJson = Json { prettyPrint = true; ignoreUnknownKeys = true }
+
     fun backupEntryForRecovery(entry: JournalEntry) {
         try {
             val dir = File(ctx.filesDir, BACKUP_DIR)
             dir.mkdirs()
             val file = File(dir, "entry_${System.currentTimeMillis()}.json")
-            file.writeText(JsonSerializer.serialize(entry).toString(2))
+            file.writeText(backupJson.encodeToString(entry))
         } catch (_: Exception) {}
     }
 
@@ -105,8 +109,7 @@ object ErrorRecoveryService {
 
     fun restoreFromBackup(file: File): JournalEntry? {
         return try {
-            val json = JSONObject(file.readText())
-            JsonSerializer.deserializeEntry(json)
+            backupJson.decodeFromString<JournalEntry>(file.readText())
         } catch (_: Exception) { null }
     }
 

@@ -1,7 +1,7 @@
 package com.soulo.app.services
 
 import com.soulo.app.models.*
-import com.soulo.app.utilities.StorageService
+import com.soulo.app.services.StorageService
 import java.util.*
 
 data class DailyInsight(
@@ -65,7 +65,7 @@ object DailyInsightService {
         )
 
         // Decision quality
-        val todayDecisions = StorageService.loadDecisions()
+        val todayDecisions = StorageService.instance.loadDecisions()
             .filter { d ->
                 val cal = Calendar.getInstance()
                 cal.timeInMillis = d.timestamp * 1000

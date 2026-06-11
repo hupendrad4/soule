@@ -20,10 +20,16 @@ fun InsightsScreen(storage: StorageService, onNavigate: (String) -> Unit) {
     var showPredictions by remember { mutableStateOf(false) }
 
     val driftReport = remember(entries) {
-        if (entries.size >= 6) CognitiveDriftService.detectDrift(entries, BiomarkerTrendService.computeTrends(
-            entries.mapNotNull { it.biomarkers }, emptyMap()
-        ).associate { it.metric to BaselineService.MetricBaseline(it.metric, it.baseline, 0.0, 0.0, 0.0, 0.0) })
-        else null
+        if (entries.size >= 6) {
+            val baselines = BiomarkerTrendService.computeTrends(
+                entries.mapNotNull { it.biomarkers }, emptyMap()
+            ).associate { it.metric to BaselineService.MetricBaseline(
+                metric = it.metric, median = it.baseline, p25 = 0.0, p75 = 0.0,
+                mean = it.baseline, stdDev = 0.0, sampleCount = it.sampleCount,
+                isStable = !it.isAnomalous
+            ) }
+            CognitiveDriftService.detectDrift(entries, baselines)
+        } else null
     }
 
     val predictions = remember(entries, patterns) {
@@ -76,12 +82,12 @@ fun InsightsScreen(storage: StorageService, onNavigate: (String) -> Unit) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text("Cognitive Drift", style = MaterialTheme.typography.titleMedium, color = SouloColors.accentWarm)
                             Spacer(modifier = Modifier.height(8.dp))
-                            Text("Score: ${"%.2f".format(driftReport.driftScore)}", color = SouloColors.textPrimary)
-                            Text("Trend: ${driftReport.trend.name}", color = SouloColors.textSecondary)
+                            Text("Score: ${"%.2f".format(driftReport.overallSignificance.score)}", color = SouloColors.textPrimary)
+                            Text("Trend: ${driftReport.overallSignificance.name}", color = SouloColors.textSecondary)
                             driftReport.drifts.take(3).forEach { drift ->
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    "${drift.metric.name}: ${"%.2f".format(drift.effectSize)} (${drift.direction.name})",
+                                    "${drift.metric.name}: ${"%.2f".format(drift.delta)} (${drift.direction.name})",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = SouloColors.textSecondary
                                 )
@@ -105,11 +111,11 @@ fun InsightsScreen(storage: StorageService, onNavigate: (String) -> Unit) {
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text(pred.title, style = MaterialTheme.typography.titleSmall, color = SouloColors.accent)
+                                Text(pred.description, style = MaterialTheme.typography.titleSmall, color = SouloColors.accent)
                                 Text("${(pred.probability * 100).toInt()}%", color = SouloColors.textSecondary)
                             }
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(pred.message, color = SouloColors.textPrimary, style = MaterialTheme.typography.bodySmall)
+                            Text(pred.suggestedAction ?: pred.description, color = SouloColors.textPrimary, style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }
